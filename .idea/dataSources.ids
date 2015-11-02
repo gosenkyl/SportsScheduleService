@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="SportsSchedule" uuid="3acce826-24bb-4f9c-94ae-979e9dccbbcc">
+    <database-info product="MySQL" version="5.5.45-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <schema name="" catalog="heroku_0f45d99b98dee1a"/>
+    <table name="game" schema="" catalog="heroku_0f45d99b98dee1a" type="TABLE">
+      <column name="game_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="year_code" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="game_increment" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="home_team_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="away_team_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="game_time" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
+      <column name="game_day" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="game_id"/>
+    </table>
+    <table name="sport" schema="" catalog="heroku_0f45d99b98dee1a" type="TABLE">
+      <column name="SPORT_ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="SPORT_CODE" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="SPORT_NAME" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="SPORT_ID"/>
+      <index name="unique_SPORT_CODE" unique="true" columns="SPORT_CODE"/>
+    </table>
+    <table name="team" schema="" catalog="heroku_0f45d99b98dee1a" type="TABLE">
+      <column name="TEAM_ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="SPORT_ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="CITY" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="MASCOT" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="PRIMARY_COLOR" sqlType="VARCHAR" precision="6" scale="0" nullable="false" jdbcType="12"/>
+      <column name="SECONDARY_COLOR" sqlType="VARCHAR" precision="6" scale="0" nullable="false" jdbcType="12"/>
+      <column name="LON_LOCATION" sqlType="DOUBLE" precision="22" scale="0" nullable="true" jdbcType="8"/>
+      <column name="LAT_LOCATION" sqlType="DOUBLE" precision="22" scale="0" nullable="true" jdbcType="8"/>
+      <column name="LOGO_URL" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <column name="TEAM_ABBR" sqlType="VARCHAR" precision="3" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="TEAM_ID"/>
+    </table>
+  </data-source>
+</component>

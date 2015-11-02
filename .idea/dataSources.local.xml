@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="SportsSchedule" uuid="3acce826-24bb-4f9c-94ae-979e9dccbbcc">
+      <secret-storage>master_key</secret-storage>
+      <user-name>ba1649382fca0b</user-name>
+      <schema-pattern>heroku_0f45d99b98dee1a.*</schema-pattern>
+      <default-schemas>heroku_0f45d99b98dee1a.*</default-schemas>
+    </data-source>
+  </component>
+</project>
