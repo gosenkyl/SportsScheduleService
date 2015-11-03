@@ -35,17 +35,21 @@ while(true) {
 
     $week = $xml->gms[0];
     $weekInfo = $week->attributes();
-    echo '<b>WEEK: '.$weekInfo['w'].' YEAR: '.$weekInfo['y'].'</b><br/><br/>';
+    //echo '<b>WEEK: '.$weekInfo['w'].' YEAR: '.$weekInfo['y'].'</b><br/><br/>';
 
     // Loop through each game of this week
     foreach($week->children() as $game){
         $gameInfo = $game->attributes();
-        echo $gameInfo['h'].' vs '.$gameInfo['v'].'<br/>';
+        //echo $gameInfo['h'].' vs '.$gameInfo['v'].'<br/>';
 
         $homeAbbr = $gameInfo['h']->__toString();
         $awayAbbr = $gameInfo['v']->__toString();
 
-        $gameDay = $gameInfo['d']->__toString();
+        // Format - YYYYMMDDGG, GG = Game Number that DAY
+        $eid = $gameInfo['eid']->__toString();
+
+        $gameDate = substr($eid, 0, 8);
+        //$gameDay = $gameInfo['d']->__toString();
         $gameTime = $gameInfo['t']->__toString();
 
         $home = $teams[$homeAbbr];
@@ -54,8 +58,8 @@ while(true) {
         $homeSchedule = $home->scheduleList;
         $awaySchedule = $away->scheduleList;
 
-        $homeOpponent = new Opponent($gameDay, $gameTime, $away->city, $away->mascot);
-        $awayOpponent = new Opponent($gameDay, $gameTime, $home->city, $home->mascot);
+        $homeOpponent = new Opponent($eid, $gameDate, $gameTime, $i, $away->city, $away->mascot);
+        $awayOpponent = new Opponent($eid, $gameDate, $gameTime, $i, $home->city, $home->mascot);
 
         array_push($teams[$homeAbbr]->scheduleList, $homeOpponent);
         array_push($teams[$awayAbbr]->scheduleList, $awayOpponent);
@@ -63,14 +67,14 @@ while(true) {
 
     foreach($teams as $team){
         if(count($team->scheduleList) < $i){
-            $bye = new Opponent('BYE', 'BYE', 'BYE', 'BYE');
+            $bye = new Opponent('BYE', 'BYE', 'BYE', $i, 'BYE', 'BYE');
             array_push($team->scheduleList, $bye);
         }
     }
 
-    echo '<br/>';
+    //echo '<br/>';
 
     $i++;
 }
 
-$test = 'test';
+echo json_encode($teams);
