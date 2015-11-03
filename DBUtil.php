@@ -3,7 +3,6 @@
 class DBUtil {
 
     public function getNFLTeamArray($db){
-
         $sql = "select t.*
             from sport s
             inner join team t on s.sport_id = t.SPORT_ID
