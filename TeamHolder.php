@@ -74,8 +74,8 @@ class TeamHolder {
                 $homeSchedule = $home->scheduleList;
                 $awaySchedule = $away->scheduleList;
 
-                $homeOpponent = new Opponent($eid, $gameDate, $gameTime, $i, $away->city, $away->mascot);
-                $awayOpponent = new Opponent($eid, $gameDate, $gameTime, $i, $home->city, $home->mascot);
+                $homeOpponent = new Opponent($eid, $gameDate, $gameTime, $i, $away->city, $away->mascot, $away->logoURL);
+                $awayOpponent = new Opponent($eid, $gameDate, $gameTime, $i, $home->city, $home->mascot, $home->logoURL);
 
                 array_push($teams[$homeAbbr]->scheduleList, $homeOpponent);
                 array_push($teams[$awayAbbr]->scheduleList, $awayOpponent);
@@ -83,7 +83,7 @@ class TeamHolder {
 
             foreach($teams as $team){
                 if(count($team->scheduleList) < $i){
-                    $bye = new Opponent('BYE', 'BYE', 'BYE', $i, 'BYE', 'BYE');
+                    $bye = new Opponent('BYE', 'BYE', 'BYE', $i, 'BYE', 'BYE', 'BYE');
                     array_push($team->scheduleList, $bye);
                 }
             }
