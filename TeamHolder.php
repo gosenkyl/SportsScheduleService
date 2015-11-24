@@ -7,8 +7,11 @@ include_once 'Opponent.php';
 include_once 'DBConnect.php';
 
 class TeamHolder {
+
     private static $instance;
+
     private $nflTeams;
+    private $mlbTeams;
 
     public static function getInstance(){
         if(!self::$instance){
@@ -22,6 +25,10 @@ class TeamHolder {
         $dbConnect = DBConnect::getInstance();
         $db = $dbConnect->getDB();
 
+        $this->setNFLTeams($db);
+    }
+
+    public function setNFLTeams($db){
         // Current NFL Week
         $CUR_GAME_WEEK = 'http://www.nfl.com/liveupdate/scorestrip/ss.xml';
 
@@ -36,7 +43,7 @@ class TeamHolder {
         $GAME_WEEK = str_replace('[seasonType]', 'REG', $GAME_WEEK);
 
         $dbUtil = new DBUtil();
-        $teams = $dbUtil->getNFLTeamArray($db);
+        $teams = $dbUtil->getTeamsArray($db, 'NFL');
 
         // Loop through each week
         $i = 1;
@@ -95,6 +102,7 @@ class TeamHolder {
 
         $this->nflTeams = $teams;
     }
+
 
     public function getNFLTeams(){
         return $this->nflTeams;

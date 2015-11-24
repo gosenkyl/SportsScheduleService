@@ -2,14 +2,15 @@
 
 class DBUtil {
 
-    public function getNFLTeamArray($db){
+    public function getTeamsArray($db, $sport){
         $sql = "select t.*
             from sport s
             inner join team t on s.sport_id = t.SPORT_ID
-            where s.SPORT_CODE = 'NFL'
+            where s.SPORT_CODE = :SPORT_CODE
             order by t.city asc";
 
         if($teams = $db->prepare($sql)){
+            $teams->bindParam(':SPORT_CODE', $sport, PDO::PARAM_STR);
             $teams->execute();
             $teamList = $teams->fetchAll(PDO::FETCH_ASSOC);
 
