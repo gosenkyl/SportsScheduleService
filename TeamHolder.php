@@ -26,6 +26,78 @@ class TeamHolder {
         $db = $dbConnect->getDB();
 
         $this->setNFLTeams($db);
+        $this->setMLBTeams($db);
+    }
+
+    public function setMLBTeams($db){
+
+        $url = "http://mlb.com/[team]/components/schedule/y[year]/schedule.js";
+
+        $dbUtil = new DBUtil();
+
+        $year = $dbUtil->getSeasonYear($db, 'MLB');
+        $url = str_replace('[year]', $year['year_code'], $url);
+
+        $teams = $dbUtil->getTeamsArray($db, 'MLB');
+
+        foreach($teams as $team){
+
+            $teamURL = str_replace('[team]', strtolower($team->teamAbbr), $url);
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $teamURL);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
+
+            // Warning: very bad assumptions
+            $result = curl_exec($curl);
+            $scheduleStr = explode("[", $result);
+
+            if(isset($scheduleStr)){
+
+                $teamSchedule = array();
+
+                // Ignore first 2 and last
+                for ($i = 2; $i < sizeof($scheduleStr) - 1; $i++) {
+                    $scheduleItemArr = explode(',', $scheduleStr[$i]);
+
+                    // Important Fields
+                    // 1 - Id
+                    // 3 - Upper Team Abbr
+                    // 32 - Time
+
+                    $eid = $scheduleItemArr[1];
+                    $opponentAbbr = $scheduleItemArr[3];
+                    $gameDateFull = $scheduleItemArr[32];
+                    $gameDate = explode(' ')
+
+                    $oppTeam = $teams[$opponentAbbr];
+
+                    $opponent = new Opponent($this->strip())
+
+                    $awayOpponent = new Opponent($eid, $gameDate, $gameTime, $i, $home->city, $home->mascot, $home->logoURL);
+
+                    array_push($teams[$homeAbbr]->scheduleList, $homeOpponent);
+                }
+
+                array_push($teamArr, $team->city . ' ' . $team->mascot . ' vs ' . $scheduleItemArr[3]);
+
+            } else {
+                //array_push($teamArr, 'ERROR: '.$team->city.' '.$team->mascot);
+            }
+
+            curl_close($curl);
+
+        }
+
+        $this->mlbTeams = $teamArr;
+
+    }
+
+    public function strip($str){
+        $str = str_split($str, 0);
+        $str = str_replace($str, sizeof($str) - 1);
+        retunr $str;
     }
 
     public function setNFLTeams($db){
@@ -106,6 +178,10 @@ class TeamHolder {
 
     public function getNFLTeams(){
         return $this->nflTeams;
+    }
+
+    public function getMLBTeams(){
+        return $this->mlbTeams;
     }
 
 }

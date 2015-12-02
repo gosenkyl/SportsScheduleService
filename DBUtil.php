@@ -27,6 +27,38 @@ class DBUtil {
         header('Location: /error.php');
     }
 
+    public function getSeasonYear($db, $sport){
+        $sql = "select s.sport_code,
+          case
+            when s.SEASON_BEGIN_MONTH < s.SEASON_END_MONTH
+              THEN
+                case
+                  when month(now()) >= s.SEASON_BEGIN_MONTH and month(now()) <= s.SEASON_END_MONTH
+                    then year(now())
+                  else year(now()) + 1
+                END
+            ELSE
+              CASE
+                WHEN month(now()) >= s.SEASON_BEGIN_MONTH OR month(now()) <= s.SEASON_END_MONTH
+                  THEN year(now())
+                ELSE year(now()) + 1
+              END
+          end as year_code
+        from sport s
+        where s.sport_code = :SPORT_CODE ";
+
+        if($year = $db->prepare($sql)){
+            $year->bindParam(':SPORT_CODE', $sport, PDO::PARAM_STR);
+            $year->execute();
+            $year = $year->fetch();
+
+            return $year;
+        }
+
+        header('Location: /error.php');
+
+    }
+
     protected function addTeamToBean($team){
         $teamBean = new Team();
         $teamBean->teamId = $team['TEAM_ID'];

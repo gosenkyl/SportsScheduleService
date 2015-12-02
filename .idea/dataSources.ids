@@ -21,6 +21,8 @@
       <column name="SPORT_ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="SPORT_CODE" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
       <column name="SPORT_NAME" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <column name="SEASON_BEGIN_MONTH" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="SEASON_END_MONTH" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="SPORT_ID"/>
       <index name="unique_SPORT_CODE" unique="true" columns="SPORT_CODE"/>
     </table>
