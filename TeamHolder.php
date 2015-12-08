@@ -40,6 +40,8 @@ class TeamHolder {
 
         $teams = $dbUtil->getTeamsArray($db, 'MLB');
 
+        $teamArr = array();
+
         foreach($teams as $team){
 
             $teamURL = str_replace('[team]', strtolower($team->teamAbbr), $url);
@@ -55,9 +57,8 @@ class TeamHolder {
 
             if(isset($scheduleStr)){
 
-                $teamSchedule = array();
-
                 // Ignore first 2 and last
+                $weekNum = 1;
                 for ($i = 2; $i < sizeof($scheduleStr) - 1; $i++) {
                     $scheduleItemArr = explode(',', $scheduleStr[$i]);
 
@@ -66,24 +67,27 @@ class TeamHolder {
                     // 3 - Upper Team Abbr
                     // 32 - Time
 
-                    $eid = $scheduleItemArr[1];
-                    $opponentAbbr = $scheduleItemArr[3];
-                    $gameDateFull = $scheduleItemArr[32];
-                    $gameDate = explode(' ')
+                    $eid = $this->strip($scheduleItemArr[1]);
+                    $opponentAbbr1 = $this->strip($scheduleItemArr[3]);
+                    $opponentAbbr2 = $this->strip($scheduleItemArr[4]);
+                    $gameDateFull = $this->strip($scheduleItemArr[32]);
+                    $gameDateParts = explode(' ', $gameDateFull);
+                    $gameDate = $gameDateParts[0];
+                    $gameTime = $gameDateParts[1];
 
-                    $oppTeam = $teams[$opponentAbbr];
+                    $oppTeam = $teams[strtoupper($opponentAbbr2)];
 
-                    $opponent = new Opponent($this->strip())
+                    $opponent = new Opponent($eid, $gameDate, $gameTime, $weekNum, $oppTeam->city, $oppTeam->mascot, $oppTeam->logoURL);
 
-                    $awayOpponent = new Opponent($eid, $gameDate, $gameTime, $i, $home->city, $home->mascot, $home->logoURL);
+                    array_push($team->scheduleList, $opponent);
 
-                    array_push($teams[$homeAbbr]->scheduleList, $homeOpponent);
+                    $weekNum++;
                 }
 
-                array_push($teamArr, $team->city . ' ' . $team->mascot . ' vs ' . $scheduleItemArr[3]);
+                array_push($teamArr, $team);
 
             } else {
-                //array_push($teamArr, 'ERROR: '.$team->city.' '.$team->mascot);
+                array_push($teamArr, 'ERROR: '.$team->city.' '.$team->mascot);
             }
 
             curl_close($curl);
@@ -95,9 +99,7 @@ class TeamHolder {
     }
 
     public function strip($str){
-        $str = str_split($str, 0);
-        $str = str_replace($str, sizeof($str) - 1);
-        retunr $str;
+        return substr(trim($str), 1, -1);
     }
 
     public function setNFLTeams($db){
